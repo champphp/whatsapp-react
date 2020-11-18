@@ -1,0 +1,20 @@
+.siedber__chat {
+  display: flex;
+  padding: 20px;
+  cursor: pointer;
+  border-bottom: 1px solid #f6f6f6;
+}
+
+.siedber__chat:hover {
+  background-color: #ebebeb;
+}
+
+.siedber__chat_info {
+  margin-left: 15px;
+}
+
+.siedber__chat_info > h2 {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
