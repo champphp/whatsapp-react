@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './Chat.css'
 
 import {
@@ -10,11 +10,23 @@ import DonutLargeIcon from '@material-ui/icons/DonutLarge'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
 import InsertEmoticonIcon from '@material-ui/icons/InsertEmoticon'
 import MicIcon from '@material-ui/icons/Mic'
+import axios from './../axios'
 
-function Chat() {
+function Chat({ messages }) {
 
-  const sendMessage = () => {
+  const [input, setInput] = useState("")
 
+  const sendMessage = async (e) => {
+    e.preventDefault()
+
+    await axios.post('/api/v1/messages/new', {
+      message: input,
+      name: "champ",
+      timestamp: "Just now!...",
+      received: true
+    })
+
+    setInput('')
   }
   return (
     <div className="chat">
@@ -39,33 +51,28 @@ function Chat() {
       </div>
 
       <div className="chat__body">
-        <p className="chat__massage">
-          <span className="chat__name">Champ</span>
-          This is a massage
-          <span className="chat__timestamp">
-            {new Date().toUTCString()}
-          </span>
-        </p>
-        <p className="chat__reciever chat__massage">
-          <span className="chat__name">Champ</span>
-          This is a massage
-          <span className="chat__timestamp">
-            {new Date().toUTCString()}
-          </span>
-        </p>
-        <p className="chat__massage">
-          <span className="chat__name">Champ</span>
-          This is a massage
-          <span className="chat__timestamp">
-            {new Date().toUTCString()}
-          </span>
-        </p>
+        {
+          messages.map((message, index) => (
+            <p key={index} className={`chat__massage ${message.received  && 'chat__reciever'}`}>
+              <span className="chat__name">{message.name}</span>
+                {message.message}
+              <span className="chat__timestamp">
+                {message.timestamp}
+              </span>
+            </p>
+          ))
+        }
       </div>
 
       <div className="chat__footer">
         <InsertEmoticonIcon />
         <form>
-          <input placeholder="Type a massage" type="text" />
+          <input 
+            value={input} 
+            onChange={e => setInput(e.target.value)} 
+            placeholder="Type a massage" 
+            type="text"
+          />
           <button onClick={sendMessage} type="submit" >
             Send a message
           </button>
